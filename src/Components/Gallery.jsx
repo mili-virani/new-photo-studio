@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import circleImage from "../assets/img/more/circle.png";
 import backgroundImage from "../assets/img/background/page-header-bg-8.jpg";
+import {getAllPhotos} from "../utils/api";
 import "../assets/css/gallery.css";
 
 const Gallery = () => {
