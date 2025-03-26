@@ -3,7 +3,7 @@ import axios from "axios";
 import circleImage from "../assets/img/more/circle.png";
 import backgroundImage from "../assets/img/background/page-header-bg-8.jpg";
 import "../assets/css/gallery.css";
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Gallery = () => {
   const [projects, setProjects] = useState([]);
@@ -14,7 +14,7 @@ const Gallery = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/gallery`);
+        const response = await axios.get(`${BASE_URL}/get_photos`);
         setProjects(response.data);
       } catch (error) {
         setError("Failed to load gallery data.");
@@ -90,7 +90,7 @@ const Gallery = () => {
                     style={{ cursor: "pointer" }}
                   >
                     <img
-                      src={BACKEND_URL+project.image_url}
+                      src={`http://68.183.93.60/py/face_recognization/${project.photopath}`}
                       alt={project.title}
                       className="card-img-top img-fluid object-fit-cover"
                       style={{ height: "500px", width: "100%" }}
