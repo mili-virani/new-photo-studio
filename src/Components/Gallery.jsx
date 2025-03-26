@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import circleImage from "../assets/img/more/circle.png";
 import backgroundImage from "../assets/img/background/page-header-bg-8.jpg";
 import "../assets/css/gallery.css";
-const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const Gallery = () => {
   const [projects, setProjects] = useState([]);
@@ -110,7 +108,7 @@ const Gallery = () => {
             <button className="close-btn-gallery" onClick={closeModal} >
             &times;</button>
             <button className="nav-btn left" onClick={prevImage} >&#10094;</button>
-            <img src={BACKEND_URL+projects[selectedImage].image_url} alt="Preview" className="modal-image-gallery" />
+            <img src={`http://68.183.93.60/py/face_recognization/${projects[selectedImage].photopath}`} alt="Preview" className="modal-image-gallery" />
             <button className="nav-btn right" onClick={nextImage}>&#10095;</button>
           </div>
         </div>

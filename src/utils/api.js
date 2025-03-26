@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const loginid = "67dbd2bb85ece786b30652c2";
+const BASE_URL = process.env.BASE_URL;
 
 export const handleApiCall = async () => {
     try {
