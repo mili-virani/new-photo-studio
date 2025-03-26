@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import circleImage from "../assets/img/more/circle.png";
 import backgroundImage from "../assets/img/background/page-header-bg-8.jpg";
-import {getAllPhotos} from "../utils/api";
+import { getAllPhotos } from "../utils/api";
 import "../assets/css/gallery.css";
 
 const Gallery = () => {
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState([]);  // Ensure it's always an array
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -13,8 +13,16 @@ const Gallery = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
+        setLoading(true);
         const data = await getAllPhotos();
-        setProjects(data);
+        console.log("API Response:", data); // Debugging log
+    
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else {
+          setProjects([]); // Prevent `.map()` errors
+          setError("Invalid response format. Expected an array.");
+        }
       } catch (error) {
         setError("Failed to load gallery data.");
         console.error("Error fetching gallery data:", error);
@@ -22,8 +30,9 @@ const Gallery = () => {
         setLoading(false);
       }
     };
+
     fetchGallery();
-  });
+  }, []);  // Run only once on mount
 
   const openModal = (index) => {
     setSelectedImage(index);
@@ -51,16 +60,13 @@ const Gallery = () => {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [projects.length]);  // Depend on `projects.length` to prevent stale state
 
   return (
     <main className={`wrapper ${selectedImage !== null ? "blur-background" : ""}`}>
       {/* Page Header */}
       <div className="wptb-page-heading">
-        <div
-          className="wptb-item--inner"
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-        >
+        <div className="wptb-item--inner" style={{ backgroundImage: `url(${backgroundImage})` }}>
           <div className="wptb-item-layer wptb-item-layer-one">
             <img src={circleImage} alt="circle" />
           </div>
@@ -79,10 +85,12 @@ const Gallery = () => {
             <p className="text-center">Loading...</p>
           ) : error ? (
             <p className="text-center text-danger">{error}</p>
+          ) : projects.length === 0 ? (
+            <p className="text-center">No photos available.</p>
           ) : (
             <div className="row">
               {projects.map((project, index) => (
-                <div key={project._id} className="col-md-4 mb-4">
+                <div key={project._id || index} className="col-md-4 mb-4">
                   <div
                     className="card bg-transparent border-none shadow-lg"
                     onClick={() => openModal(index)}
@@ -90,7 +98,7 @@ const Gallery = () => {
                   >
                     <img
                       src={`http://68.183.93.60/py/face_recognization/${project.photopath}`}
-                      alt={project.title}
+                      alt={project.title || "Gallery Image"}
                       className="card-img-top img-fluid object-fit-cover"
                       style={{ height: "500px", width: "100%" }}
                     />
@@ -103,13 +111,16 @@ const Gallery = () => {
       </section>
 
       {/* Modal for Image Preview */}
-      {selectedImage !== null && (
+      {selectedImage !== null && projects[selectedImage] && (
         <div className="modal-overlay-gallery" onClick={closeModal}>
           <div className="modal-content-gallery" onClick={(e) => e.stopPropagation()}>
-            <button className="close-btn-gallery" onClick={closeModal} >
-            &times;</button>
-            <button className="nav-btn left" onClick={prevImage} >&#10094;</button>
-            <img src={`http://68.183.93.60/py/face_recognization/${projects[selectedImage].photopath}`} alt="Preview" className="modal-image-gallery" />
+            <button className="close-btn-gallery" onClick={closeModal}>&times;</button>
+            <button className="nav-btn left" onClick={prevImage}>&#10094;</button>
+            <img
+              src={`http://68.183.93.60/py/face_recognization/${projects[selectedImage].photopath}`}
+              alt="Preview"
+              className="modal-image-gallery"
+            />
             <button className="nav-btn right" onClick={nextImage}>&#10095;</button>
           </div>
         </div>
