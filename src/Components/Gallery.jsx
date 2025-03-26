@@ -14,8 +14,8 @@ const Gallery = () => {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/get_photos`);
-        setProjects(response.data);
+        const data = await getAllPhotos();
+        setProjects(data);
       } catch (error) {
         setError("Failed to load gallery data.");
         console.error("Error fetching gallery data:", error);
