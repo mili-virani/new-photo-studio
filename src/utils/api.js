@@ -3,17 +3,17 @@ import axios from "axios";
 const loginid = "67dbd2bb85ece786b30652c2";
 const BASE_URL = "http://68.183.93.60:7979";
 
-export const handleApiCall = async () => {
-    try {
-      const response = await axios.get(BASE_URL);
-      console.log("API Response:", response.data);
-              return response.data;
+// export const handleApiCall = async () => {
+//     try {
+//       const response = await axios.get(BASE_URL);
+//       console.log("API Response:", response.data);
+//               return response.data;
 
-    } catch (error) {
-      console.error("API call failed:", error);
-      alert("Failed to fetch data from the API.");
-    }
-  };
+//     } catch (error) {
+//       console.error("API call failed:", error);
+//       alert("Failed to fetch data from the API.");
+//     }
+//   };
 
 // Upload image & recognize face
 export const recognizeFace = async (formData) => {
